@@ -29,4 +29,46 @@ const getallEmployees = (req, res) => {
     });
 };
 
-module.exports = { addEmployee, getallEmployees };
+const getemployeebycompany = (req, res) => {
+  let companyid = req.params.companyid;
+  console.log(companyid);
+  return Employee.findAll({
+    where: {
+      companyId: companyid,
+    },
+    include: {
+      model: Company,
+    },
+  })
+    .then((employee) => res.status(201).send(employee))
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send(err);
+    });
+};
+
+const getemployeebyname = (req, res) => {
+  let { name } = req.params;
+  console.log(name);
+
+  return Employee.findOne({
+    where: {
+      name: name,
+    },
+    include: {
+      model: Company,
+    },
+  })
+    .then((employee) => res.status(201).send(employee))
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send(err);
+    });
+};
+
+module.exports = {
+  addEmployee,
+  getallEmployees,
+  getemployeebycompany,
+  getemployeebyname,
+};
