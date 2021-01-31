@@ -1,1 +1,1 @@
-# node-sequelize
+# node-sequelizes
