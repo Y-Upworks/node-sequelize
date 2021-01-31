@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const port = parseInt(process.env.PORT, 10) || 8000;
 const app = express();
 var cors = require("cors");
+const db = require("./models");
 
 app.use(logger("dev"));
 app.use(bodyParser.json());
@@ -13,6 +14,10 @@ app.use(cors());
 //Models
 var models = require("./models");
 
+db.sequelize
+  .authenticate()
+  .then(() => console.log("connection established"))
+  .catch((err) => console.log(err));
 //sync database
 models.sequelize
   .sync()
