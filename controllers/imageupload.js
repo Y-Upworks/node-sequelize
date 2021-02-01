@@ -1,3 +1,4 @@
+const ImageUploader = require("../utils/ImageUploads3Bucket");
 exports.editprofile = async (request, response, next) => {
   try {
     const { sub_type } = request.body;
