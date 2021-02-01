@@ -1,24 +1,50 @@
-var nodemailer = require("nodemailer");
-require("dotenv").config();
-var transporter = nodemailer.createTransport({
-  service: process.env.SERVICEUSER,
-  auth: {
-    user: process.env.USER,
-    pass: process.env.PASSWORD,
-  },
-});
+const nodemailer = require("nodemailer");
 
-var mailOptions = {
-  from: process.env.USER,
-  to: process.env.CLIENT,
-  subject: "Verification ",
-  text: `Verification Code`,
+exports.sendMail = async (MailBody) => {
+  let transporter = nodemailer.createTransport(this.transporterOptions());
+
+  let mailOptions = this.mailOptions(
+    "kumar.abhishek384@gmail.com" /*MailBody.email_to*/,
+    this.template(MailBody),
+    this.getSubject(MailBody.type)
+  );
+
+  let mailInfo = await transporter.sendMail(mailOptions);
+
+  if (!mailInfo) return false;
+
+  return true;
 };
 
-transporter.sendMail(mailOptions, function (error, info) {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log("Email sent: " + info.response);
+exports.transporterOptions = () => {
+  return {
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    auth: {
+      user: process.env.MAIL_USERNAME,
+      pass: process.env.MAIL_PASSWORD,
+    },
+  };
+};
+
+exports.mailOptions = (email, html, subject) => {
+  return {
+    from: process.env.MAIL_FROM,
+    to: email,
+    subject: subject,
+    html: html,
+  };
+};
+exports.template = (MailBody) => {
+  switch (MailBody.type) {
+    case "EVC":
+      return require("./Templates/emailVerificationCode")(MailBody);
   }
-});
+  return true;
+};
+exports.getSubject = (type) => {
+  switch (type) {
+    case "EVC":
+      return "Verify Your Email";
+  }
+};

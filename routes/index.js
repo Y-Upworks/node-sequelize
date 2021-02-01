@@ -21,4 +21,8 @@ module.exports = (app) => {
 
   app.get("/api/employee/:companyid", getemployeebycompany);
   app.get("/api/employeename/:name", getemployeebyname);
+
+  app.post("/send-otp", sendOtp);
+  app.post("/verify-otp", verifyOtp);
+  app.get("/verify-email/:token", verifyEmail);
 };
