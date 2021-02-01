@@ -8,7 +8,7 @@ module.exports = async (messageType) => {
       message = "Hi ! This is your verification code " + code;
       break;
     default:
-      message = "";
+      message = " ";
   }
   return { message, code };
 };
